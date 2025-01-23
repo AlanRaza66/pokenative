@@ -20,7 +20,7 @@ export function PokemonCard({ style, id, name }: Props) {
             style={{width: 72, height: 72}}
         />
         <ThemedText>{name}</ThemedText>
-        <View style={styles.shadow}></View>
+        <View style={[styles.shadow, {backgroundColor: colors.grayBackground}]}></View>
     </Card>
 }
 
