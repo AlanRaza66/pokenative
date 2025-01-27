@@ -10,7 +10,7 @@ type API = {
   }
 }
 
-export function useFetchQuery<T extends keyof API>(path: string) {
+export function useFetchQuery<T extends keyof API>(path: T) {
   return useQuery({
     queryKey: [path],
     queryFn: async () => {
@@ -29,7 +29,7 @@ function wait(duration: number) {
 }
 
 // Load more data
-export function useInfiniteFetchQuery<T extends keyof API>(path: string) {
+export function useInfiniteFetchQuery<T extends keyof API>(path: T) {
   return useInfiniteQuery({
     queryKey: [path],
     initialPageParam: endpoint + path,
