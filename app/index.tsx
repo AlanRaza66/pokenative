@@ -2,14 +2,17 @@ import Card from "@/components/Card";
 import { ThemedText } from "@/components/ThemedText";
 import { PokemonCard } from "@/components/pokemon/PokemonCard";
 import { getPokemonId } from "@/functions/pokemon";
-import { useFetchQuery } from "@/hooks/useFetchQuery";
+import { useFetchQuery, useInfiniteFetchQuery } from "@/hooks/useFetchQuery";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { ActivityIndicator, FlatList, Image, SafeAreaView, StyleSheet, View } from "react-native";
 
 export default function Index() {
     const colors = useThemeColors();
-    const { data, isFetching } = useFetchQuery("/pokemon?limit=21");
-    const pokemons = data?.results ?? [];
+    // Fetch only one page
+    // const { data, isFetching } = useFetchQuery("/pokemon?limit=21");
+    // const pokemons = data?.results ?? [];
+    const { data, isFetching, fetchNextPage } = useInfiniteFetchQuery("/pokemon?limit=21");
+    const pokemons = data?.pages.flatMap(page => page.results) ?? [];
     return (
         <SafeAreaView style={[styles.container, { backgroundColor: colors.tint, padding: 4 }]}>
             <View style={styles.header}>
@@ -22,7 +25,7 @@ export default function Index() {
                     numColumns={3}
                     contentContainerStyle={[styles.gridGap, styles.list]}
                     columnWrapperStyle={styles.gridGap}
-                    //
+                    onEndReached={() => fetchNextPage()}
                     ListFooterComponent={
                         isFetching ? <ActivityIndicator color={colors.tint} /> : null
                     }
