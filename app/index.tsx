@@ -1,4 +1,5 @@
 import Card from "@/components/Card";
+import { RootView } from "@/components/RootView";
 import { Row } from "@/components/Row";
 import { SearchBar } from "@/components/SearchBar";
 import { SortButton } from "@/components/SortButton";
@@ -7,8 +8,8 @@ import { PokemonCard } from "@/components/pokemon/PokemonCard";
 import { getPokemonId } from "@/functions/pokemon";
 import { useInfiniteFetchQuery } from "@/hooks/useFetchQuery";
 import { useThemeColors } from "@/hooks/useThemeColors";
-import { useState } from "react";
-import { ActivityIndicator, FlatList, Image, SafeAreaView, StyleSheet, View } from "react-native";
+import React, { useState } from "react";
+import { ActivityIndicator, FlatList, Image, StyleSheet } from "react-native";
 
 export default function Index() {
     const colors = useThemeColors();
@@ -26,7 +27,7 @@ export default function Index() {
         )
         : pokemons].sort((a, b) => (a[sortKey] < b[sortKey] ? -1 : 1));
     return (
-        <SafeAreaView style={[styles.container, { backgroundColor: colors.tint, padding: 4 }]}>
+        <RootView>
             <Row style={styles.header} gap={16}>
                 <Image source={require("@/assets/images/pokeball.png")} width={24} height={24} />
                 <ThemedText variant="headLine" color="grayWhite">Pokédex</ThemedText>
@@ -49,7 +50,7 @@ export default function Index() {
                     renderItem={({ item }) => <PokemonCard id={item.id} name={item.name} style={{ flex: 1 / 3 }} />
                     } keyExtractor={(item) => item.id.toString()} />
             </Card>
-        </SafeAreaView>
+        </RootView>
     )
 }
 
