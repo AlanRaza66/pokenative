@@ -10,5 +10,5 @@ export function Row({ style, gap, ...rest }: Props) {
 
 const rowStyle = {
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
 } satisfies ViewStyle;

@@ -15,7 +15,7 @@ type API = {
     url: string;
     weight: number;
     height: number;
-    movers: { move: { name: string } }[];
+    moves: { move: { name: string } }[];
     stats: {
       base_stat: number;
       stat: {
@@ -27,7 +27,15 @@ type API = {
     };
     types: {
       type: {
-        name: keyof typeof Colors["types"];
+        name: keyof (typeof Colors)["types"];
+      };
+    }[];
+  };
+  "/pokemon-species/[id]": {
+    flavor_text_entries: {
+      flavor_text: string;
+      language: {
+        name: string;
       };
     }[];
   };
