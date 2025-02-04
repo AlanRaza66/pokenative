@@ -11,6 +11,7 @@ import { useFetchQuery } from "@/hooks/useFetchQuery";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { router, useLocalSearchParams } from "expo-router";
 import { Image, Pressable, StyleSheet, View } from "react-native";
+import { Audio } from "expo-av";
 
 export default function Pokemon() {
     const params = useLocalSearchParams() as { id: string }
@@ -21,6 +22,17 @@ export default function Pokemon() {
     const colorType = mainType ? Colors.types[mainType] : colors.tint;
     const types = pokemon?.types ?? [];
     const bio = species?.flavor_text_entries.find(({ language }) => language.name === "en")?.flavor_text.replaceAll("\n", ". ")
+
+    const onImagePress = async () => {
+        const cry = pokemon?.cries.latest;
+        if (!cry) {
+            return;
+        }
+        const { sound } = await Audio.Sound.createAsync({
+            uri: cry
+        }, { shouldPlay: true });
+        sound.playAsync();
+    }
     return <RootView backgroundColor={colorType}>
         <View >
             <Image style={[styles.pokeball]} source={require("@/assets/images/bigPokeball.png")} />
@@ -35,12 +47,14 @@ export default function Pokemon() {
             </Row>
             <View style={styles.body}>
                 <Row style={[styles.imageRow]}>
-                    <Image
-                        style={[styles.artwork, { width: 200, height: 200 }]}
-                        source={{
-                            uri: getPokemonArtwork(params.id)
-                        }}
-                    />
+                    <Pressable onPress={onImagePress}>
+                        <Image
+                            style={[styles.artwork, { width: 200, height: 200 }]}
+                            source={{
+                                uri: getPokemonArtwork(params.id)
+                            }}
+                        />
+                    </Pressable>
                 </Row>
             </View>
             <Card style={[styles.card]}>
