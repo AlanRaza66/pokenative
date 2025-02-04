@@ -1,14 +1,44 @@
-import React from 'react';
-import { ViewProps } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, ViewProps } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useThemeColors } from "@/hooks/useThemeColors";
+import Animated, { Easing, ReduceMotion, interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-type Props = ViewProps;
+type Props = ViewProps & {
+    backgroundColor?: string
+};
 
-export function RootView({ style, ...rest }: Props) {
+export function RootView({ style, backgroundColor, ...rest }: Props) {
     const colors = useThemeColors();
-    return <SafeAreaView style={[rootStyle, { backgroundColor: colors.tint, padding: 4 }, style]} {...rest}>
-    </SafeAreaView>
+    const progress = useSharedValue(0);
+    const animatedStyle = useAnimatedStyle(() => {
+        return {
+            backgroundColor: interpolateColor(
+                progress.value,
+                [0, 1],
+                [colors.tint, backgroundColor ?? colors.tint]
+            ),
+        };
+    }, [backgroundColor]);
+
+    useEffect(() => {
+        if (backgroundColor) {
+            progress.value = 0,
+            progress.value = withTiming(1, {
+                duration: 700,
+                easing: Easing.out(Easing.quad),
+                reduceMotion: ReduceMotion.System,
+            })
+        }
+    }, [backgroundColor])
+
+    if (!backgroundColor) {
+        return <SafeAreaView style={[rootStyle, { backgroundColor: colors.tint, padding: 4 }, style]} {...rest}>
+        </SafeAreaView>
+    }
+    return <Animated.View style={[{ flex: 1 }, animatedStyle, style]}>
+        <SafeAreaView style={[rootStyle]}  {...rest}></SafeAreaView>
+    </Animated.View>
 }
 
 const rootStyle = {

@@ -21,7 +21,7 @@ export default function Pokemon() {
     const colorType = mainType ? Colors.types[mainType] : colors.tint;
     const types = pokemon?.types ?? [];
     const bio = species?.flavor_text_entries.find(({ language }) => language.name === "en")?.flavor_text.replaceAll("\n", ". ")
-    return <RootView style={{ backgroundColor: colorType }}>
+    return <RootView backgroundColor={colorType}>
         <View >
             <Image style={[styles.pokeball]} source={require("@/assets/images/bigPokeball.png")} />
             <Row style={styles.header}>
@@ -34,15 +34,17 @@ export default function Pokemon() {
                 <ThemedText color="grayWhite" variant="subtitle2">#{params.id.padStart(3, '0')}</ThemedText>
             </Row>
             <View style={styles.body}>
-                <Image
-                    style={[styles.artwork, { width: 200, height: 200 }]}
-                    source={{
-                        uri: getPokemonArtwork(params.id)
-                    }}
-                />
+                <Row style={[styles.imageRow]}>
+                    <Image
+                        style={[styles.artwork, { width: 200, height: 200 }]}
+                        source={{
+                            uri: getPokemonArtwork(params.id)
+                        }}
+                    />
+                </Row>
             </View>
             <Card style={[styles.card]}>
-                <Row gap={16}>
+                <Row gap={16} style={{ height: 20 }}>
                     {types?.map((type) => {
                         return <PokemonType name={type.type.name} key={type.type.name} />
                     })}
@@ -76,10 +78,13 @@ const styles = StyleSheet.create({
         top: 8,
         right: 8
     },
-    artwork: {
+    imageRow: {
         alignSelf: "center",
         position: "absolute",
         top: -140,
+    },
+    artwork: {
+        alignSelf: "center",
     },
     body: {
         alignSelf: "stretch",
