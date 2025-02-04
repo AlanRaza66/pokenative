@@ -60,7 +60,7 @@ export default function Pokemon() {
                 <ThemedText color="grayWhite" variant="headLine" style={{ textTransform: "capitalize" }}>{pokemon?.name}</ThemedText>
                 <ThemedText color="grayWhite" variant="subtitle2">#{params.id.padStart(3, '0')}</ThemedText>
             </Row>
-            <View style={styles.body}>
+            <Card style={[styles.card]}>
                 <Row style={[styles.imageRow]}>
                     {id === 1 ? <View style={{ width: 24, height: 24 }}></View> : <Pressable onPress={onPreview}>
                         <Image
@@ -85,8 +85,6 @@ export default function Pokemon() {
                         />
                     </Pressable>
                 </Row>
-            </View>
-            <Card style={[styles.card]}>
                 <Row gap={16} style={{ height: 20 }}>
                     {types?.map((type) => {
                         return <PokemonType name={type.type.name} key={type.type.name} />
@@ -133,12 +131,9 @@ const styles = StyleSheet.create({
     artwork: {
         alignSelf: "center",
     },
-    body: {
-        alignSelf: "stretch",
-        marginTop: 144,
-        zIndex: 2
-    },
     card: {
+        overflow: "visible",
+        marginTop: 144,
         paddingHorizontal: 20,
         paddingTop: 60,
         paddingBottom: 20,
