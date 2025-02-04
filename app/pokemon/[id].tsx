@@ -33,6 +33,21 @@ export default function Pokemon() {
         }, { shouldPlay: true });
         sound.playAsync();
     }
+    const id = parseInt(params.id)
+    const onPreview = () => {
+        router.replace({
+            pathname: "/pokemon/[id]",
+            params: { id: Math.max(id - 1, 1) }
+        })
+    }
+    const onNext = () => {
+        router.replace({
+            pathname: "/pokemon/[id]",
+            params: {
+                id: id + 1
+            }
+        })
+    }
     return <RootView backgroundColor={colorType}>
         <View >
             <Image style={[styles.pokeball]} source={require("@/assets/images/bigPokeball.png")} />
@@ -47,12 +62,26 @@ export default function Pokemon() {
             </Row>
             <View style={styles.body}>
                 <Row style={[styles.imageRow]}>
+                    {id === 1 ? <View style={{ width: 24, height: 24 }}></View> : <Pressable onPress={onPreview}>
+                        <Image
+                            height={24}
+                            width={24}
+                            source={require("@/assets/images/prev.png")}
+                        />
+                    </Pressable>}
                     <Pressable onPress={onImagePress}>
                         <Image
                             style={[styles.artwork, { width: 200, height: 200 }]}
                             source={{
                                 uri: getPokemonArtwork(params.id)
                             }}
+                        />
+                    </Pressable>
+                    <Pressable onPress={onNext}>
+                        <Image
+                            height={24}
+                            width={24}
+                            source={require("@/assets/images/next.png")}
                         />
                     </Pressable>
                 </Row>
@@ -96,6 +125,10 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         position: "absolute",
         top: -140,
+        justifyContent: "space-between",
+        left: 0,
+        right: 0,
+        paddingHorizontal: 20
     },
     artwork: {
         alignSelf: "center",
